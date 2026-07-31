@@ -1,11 +1,17 @@
-\<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Yashfeen — Portfolio</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
 <style>
   :root {
+    /* Color palette */
     --color-bg: #f7f5f2;
     --color-surface: #ffffff;
     --color-text: #16211e;
@@ -16,8 +22,18 @@
     --color-accent: #e07a5f;
     --color-accent-dark: #c85f45;
     --color-border: #dde3e0;
+
+    /* Typography */
+    --font-heading: "Manrope", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-body: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+    /* Layout */
     --radius: 10px;
     --max-width: 900px;
+
+    /* Motion */
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --fade-duration: 0.7s;
   }
 
   * { box-sizing: border-box; }
@@ -25,10 +41,14 @@
 
   body {
     margin: 0;
-    font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: var(--font-body);
     background-color: var(--color-bg);
     color: var(--color-text);
     line-height: 1.6;
+  }
+
+  h1, h2, h3 {
+    font-family: var(--font-heading);
   }
 
   img { max-width: 100%; display: block; }
@@ -37,6 +57,7 @@
     color: var(--color-primary);
     text-decoration-thickness: 2px;
     text-underline-offset: 3px;
+    transition: color 0.2s ease;
   }
 
   a:hover, a:focus { color: var(--color-accent-dark); }
@@ -80,8 +101,9 @@
 
   header.site-header h1 {
     margin: 0;
+    font-weight: 800;
     font-size: clamp(2rem, 5vw, 2.75rem);
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
   }
 
   header.site-header p.tagline {
@@ -104,9 +126,12 @@
 
   nav.primary-nav a {
     color: #fff;
+    font-family: var(--font-heading);
     font-weight: 600;
+    font-size: 0.95rem;
     padding: 0.35rem 0.1rem;
     border-bottom: 2px solid transparent;
+    transition: color 0.2s ease, border-color 0.2s ease;
   }
 
   nav.primary-nav a:hover, nav.primary-nav a:focus {
@@ -117,12 +142,50 @@
   section {
     padding: 3rem 0;
     border-bottom: 1px solid var(--color-border);
+    scroll-margin-top: 1.5rem;
   }
 
   section:last-of-type { border-bottom: none; }
 
+  /* Fade-in on load, staggered per section */
+  section {
+    opacity: 0;
+    animation: fadeInUp var(--fade-duration) var(--ease-out) forwards;
+  }
+
+  header.site-header {
+    opacity: 0;
+    animation: fadeInUp var(--fade-duration) var(--ease-out) forwards;
+  }
+
+  header.site-header { animation-delay: 0s; }
+  section#about     { animation-delay: 0.15s; }
+  section#projects  { animation-delay: 0.3s; }
+  section#skills    { animation-delay: 0.45s; }
+  section#contact   { animation-delay: 0.6s; }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    header.site-header, section {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+
   section > .wrapper > h2 {
     font-size: 1.6rem;
+    font-weight: 700;
     margin-top: 0;
     margin-bottom: 1.25rem;
     color: var(--color-primary-dark);
@@ -166,25 +229,28 @@
     flex-direction: column;
     gap: 0.6rem;
     box-shadow: 0 1px 3px rgba(15, 76, 70, 0.06);
-    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    transition: box-shadow 0.25s var(--ease-out), transform 0.25s var(--ease-out), border-color 0.25s ease;
   }
 
   .item-card:hover {
-    box-shadow: 0 6px 16px rgba(15, 76, 70, 0.12);
-    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(15, 76, 70, 0.14);
+    transform: translateY(-3px);
+    border-top-color: var(--color-accent);
   }
 
   .item-card h3 {
     margin: 0;
+    font-weight: 700;
     font-size: 1.15rem;
     color: var(--color-text);
   }
 
   .item-card .item-meta {
-    font-size: 0.8rem;
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
     color: var(--color-accent-dark);
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
     font-weight: 700;
     margin: 0;
   }
@@ -207,6 +273,12 @@
     padding: 0.2rem 0.6rem;
     border-radius: 999px;
     font-weight: 600;
+    transition: background 0.2s ease;
+  }
+
+  .item-card:hover ul.tech-list li {
+    background: var(--color-accent);
+    color: #fff;
   }
 
   .item-card .item-link {
@@ -214,9 +286,13 @@
     font-weight: 600;
     align-self: flex-start;
     color: var(--color-accent-dark);
+    transition: transform 0.2s ease, color 0.2s ease;
   }
 
-  .item-card .item-link:hover { color: var(--color-primary); }
+  .item-card .item-link:hover {
+    color: var(--color-primary);
+    transform: translateX(3px);
+  }
 
   .skills-list {
     list-style: none;
@@ -235,6 +311,12 @@
     padding: 0.75rem 1rem;
     font-weight: 600;
     color: var(--color-primary-dark);
+    transition: transform 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out);
+  }
+
+  .skills-list li:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(15, 76, 70, 0.1);
   }
 
   #contact {
@@ -258,6 +340,7 @@
   }
 
   .contact-list .contact-label {
+    font-family: var(--font-heading);
     font-weight: 700;
     min-width: 5.5rem;
     color: var(--color-primary-dark);
@@ -348,16 +431,34 @@
             <p class="item-meta">Project</p>
             <h3>Project Title Two</h3>
             <p>
-              A short description of the second project goes here — the
-              tools used and any notable outcomes or results.
+              Built a data analysis project that uncovered clear, actionable
+              insights from a real-world dataset, earning an award for
+              excellence in data analysis.
             </p>
             <ul class="tech-list" aria-label="Technologies used">
               <li>Python</li>
               <li>Data Analysis</li>
+              <li>Award Winner</li>
             </ul>
             <a class="item-link" href="#" aria-label="View Project Title Two (link placeholder)">
               View project →
             </a>
+          </article>
+
+          <article class="item-card">
+            <p class="item-meta">Internship</p>
+            <h3>AI Internship</h3>
+            <p>
+              Worked on AI-powered workflows and applications, building
+              retrieval-augmented features and automations that connected
+              a language model to a vector database and no-code automation
+              pipelines.
+            </p>
+            <ul class="tech-list" aria-label="Technologies used">
+              <li>Claude</li>
+              <li>Qdrant</li>
+              <li>n8n</li>
+            </ul>
           </article>
 
           <article class="item-card">
@@ -393,7 +494,7 @@
         <ul class="contact-list">
           <li>
             <span class="contact-label">Email:</span>
-            <a href="mailto:yashfeen@example.com">yashfeen@example.com</a>
+            <a href="mailto:yashfeen725@gmail.com">yashfeen725@gmail.com</a>
           </li>
           <li>
             <span class="contact-label">LinkedIn:</span>
